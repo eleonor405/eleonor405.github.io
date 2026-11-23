@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Guinea Merge Meadow</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">🐹</div>
+          <div>
+            <p class="eyebrow">MEADOW PUZZLE</p>
+            <h1>Guinea Merge</h1>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>Spinach</span><strong id="spinach">0</strong></div>
+          <div class="stat"><span>Joy</span><strong id="joy">0</strong></div>
+          <button id="soundButton" class="icon-button" type="button" aria-label="Toggle sound">♪</button>
+        </div>
+      </header>
+
+      <section class="game-layout">
+        <aside class="level-panel">
+          <p class="eyebrow">CURRENT LEVEL</p>
+          <div class="level-line"><span id="levelNumber">1</span><small id="levelName">Meadow Morning</small></div>
+          <div class="goal">
+            <div class="goal-copy"><span>Level goal</span><strong><b id="levelPoints">0</b> / <span id="goalPoints">50</span></strong></div>
+            <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+          </div>
+          <p class="tip">Slide matching guinea pigs together to grow your herd.</p>
+        </aside>
+
+        <section class="board-wrap" aria-label="Game board">
+          <div id="scene" class="scene"></div>
+          <div id="boardStatus" class="board-status" aria-live="polite"></div>
+          <div class="board-controls" aria-label="Move controls">
+            <button data-direction="up" type="button" aria-label="Move up">↑</button>
+            <button data-direction="left" type="button" aria-label="Move left">←</button>
+            <button data-direction="down" type="button" aria-label="Move down">↓</button>
+            <button data-direction="right" type="button" aria-label="Move right">→</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="levelModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="levelTitle">
+      <div class="modal-card level-card">
+        <div id="jumpscare" class="jumpscare" aria-hidden="true">🐹</div>
+        <p class="eyebrow">LEVEL COMPLETE</p>
+        <h2 id="levelTitle">Meadow Morning complete!</h2>
+        <p>You found 1 fresh spinach.</p>
+        <div class="modal-actions">
+          <button id="openShop" class="primary-button" type="button">Visit the toy shop</button>
+          <button id="continueLevel" class="secondary-button" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="shopModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+      <div class="modal-card shop-card">
+        <div class="shop-heading">
+          <div>
+            <p class="eyebrow">MEADOW MARKET</p>
+            <h2 id="shopTitle">Toy Shop</h2>
+          </div>
+          <button id="closeShop" class="icon-button" type="button" aria-label="Close shop">×</button>
+        </div>
+        <div class="shop-balance"><span>Spinach</span><strong id="shopSpinach">0</strong></div>
+        <div id="toyGrid" class="toy-grid"></div>
+      </div>
+    </div>
+
+    <div id="gameOverModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+      <div class="modal-card">
+        <div class="sad-pig">🐹</div>
+        <p class="eyebrow">THE HAY IS FULL</p>
+        <h2 id="gameOverTitle">No more moves</h2>
+        <p>Your herd will stay snuggly in the meadow.</p>
+        <button id="restartGame" class="primary-button" type="button">Try again</button>
+      </div>
+    </div>
+
+    <script type="module" src="./game.js"></script>
+  </body>
+</html>
