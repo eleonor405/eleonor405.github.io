@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statistics Explorer</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">Σ</div>
+      <div>
+        <h1>Statistics Explorer</h1>
+        <p>Year 10 data and distributions</p>
+      </div>
+    </div>
+    <div class="mode-switch" role="group" aria-label="Choose mode">
+      <button id="learningMode" class="mode-button active" type="button">Learning Mode</button>
+      <button id="practiceMode" class="mode-button" type="button">Practice Mode</button>
+      <button id="metaMode" class="mode-button" type="button">Meta Mode</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="learningSection" class="mode-section">
+      <section class="panel data-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">DATA SET</p>
+            <h2>Enter your values</h2>
+          </div>
+          <button id="randomData" class="secondary-button" type="button">Randomise data</button>
+        </div>
+        <label for="dataInput" class="sr-only">Data values</label>
+        <input id="dataInput" class="data-input" value="" autocomplete="off" />
+        <p id="dataError" class="data-error" role="alert"></p>
+        <p class="hint">Separate values with commas. Negative values are not accepted.</p>
+        <p class="hint">Drag a data point in the box plot, cumulative-frequency graph or distribution curve to edit it; every display updates together.</p>
+      </section>
+
+      <section class="graphs-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">VISUALISATIONS</p>
+            <h2>Data displays</h2>
+          </div>
+          <p class="rounding-note">Results rounded to two decimal places</p>
+        </div>
+        <div class="graphs-grid">
+          <article class="graph-card wide">
+            <div class="graph-title"><h3>Box plot</h3><span id="boxLegend">Whiskers: extreme non-outliers</span></div>
+            <div id="boxPlot" class="graph"></div>
+          </article>
+          <article class="graph-card">
+            <div class="graph-title"><h3>Cumulative frequency</h3><span>Ogive with observed data points</span></div>
+            <div id="ogivePlot" class="graph"></div>
+          </article>
+          <article class="graph-card">
+            <div class="graph-title"><h3>Stem-and-leaf plot</h3><span id="stemKey">Key</span></div>
+            <div id="stemPlot" class="stem-container"></div>
+          </article>
+          <article class="graph-card">
+            <div class="graph-title"><h3>Distribution curve</h3><span>Smoothed shape guide, not a normal model</span></div>
+            <div id="distributionLegend" class="distribution-legend"></div>
+            <div id="distributionPlot" class="graph"></div>
+            <p id="distributionNote" class="chart-note"></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="indicators-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CALCULATED RESULTS</p>
+            <h2>Indicators</h2>
+          </div>
+          <p class="rounding-note">Select ? for a worked example using this data set.</p>
+        </div>
+        <section class="stats-grid" id="statsGrid"></section>
+      </section>
+    </section>
+
+    <section id="practiceSection" class="mode-section hidden">
+      <section class="practice-layout">
+        <aside class="panel practice-question">
+          <div class="practice-question-heading">
+            <button id="newQuestion" class="new-question-button" type="button" aria-label="New question" title="New question">+</button>
+            <div>
+              <p class="eyebrow">PRACTICE QUESTION</p>
+              <h2 id="practiceContext">Survey</h2>
+            </div>
+          </div>
+          <p id="practicePrompt" class="practice-prompt"></p>
+          <div class="practice-dataset">
+            <strong>Data set</strong>
+            <p id="practiceDataValues" aria-live="polite"></p>
+            <span>Use every value, including repeats.</span>
+          </div>
+
+          <form id="practiceForm" novalidate>
+            <div class="answer-grid">
+              <label>Mean<input name="mean" type="text" inputmode="decimal" /></label>
+              <label>Median<input name="median" type="text" inputmode="decimal" /></label>
+              <label>Mode<input name="mode" type="text" placeholder="e.g. 23, 25 or None" /></label>
+              <label>IQR<input name="iqr" type="text" inputmode="decimal" /></label>
+              <label>Range<input name="range" type="text" inputmode="decimal" /></label>
+              <label>Standard deviation<input name="sd" type="text" inputmode="decimal" /></label>
+              <label>Outlier(s)<input name="outliers" type="text" placeholder="e.g. 42 or None" /></label>
+              <label>Skew
+                <select name="skew">
+                  <option value="">Choose…</option>
+                  <option value="positive">Positive skew</option>
+                  <option value="negative">Negative skew</option>
+                  <option value="symmetric">Approximately symmetric</option>
+                </select>
+              </label>
+            </div>
+            <button class="primary-button" type="submit">Check answers</button>
+          </form>
+        </aside>
+
+        <section class="practice-right">
+          <div id="practiceScore" class="practice-score">
+            <div class="practice-score-summary" role="status" aria-live="polite">
+              <strong>Practice score</strong>
+              <span><b id="practiceScoreValue">0</b> points across <b id="practiceQuestionCount">0</b> questions</span>
+            </div>
+            <button id="resetPracticeScore" class="score-reset-button" type="button" aria-label="Reset practice score and question history" title="Reset practice score">↻</button>
+          </div>
+          <p id="practiceScoreNotice" class="score-storage-notice" role="status" aria-live="polite"></p>
+          <article class="graph-card practice-cumulative">
+            <div class="graph-title"><h3>My cumulative frequency graph</h3><span>Built from your five-number summary</span></div>
+            <div id="practiceOgivePlot" class="graph"></div>
+          </article>
+          <article class="graph-card practice-box-card">
+            <div class="graph-title"><h3>My box plot</h3><span id="practiceBoxLegend">Whiskers: minimum to maximum</span></div>
+            <div id="practiceBoxPlot" class="graph"></div>
+            <div class="mini-inputs">
+              <label><span class="mini-label">Min <button class="field-help" type="button" data-definition="minimum" aria-label="Explain minimum">?</button></span><input id="practiceMin" type="text" inputmode="decimal" /></label>
+              <label><span class="mini-label">Q1 <button class="field-help" type="button" data-definition="q1" aria-label="Explain Q1">?</button></span><input id="practiceQ1" type="text" inputmode="decimal" /></label>
+              <label><span class="mini-label">Median <button class="field-help" type="button" data-definition="median" aria-label="Explain median">?</button></span><input id="practiceMedian" type="text" inputmode="decimal" /></label>
+              <label><span class="mini-label">Q3 <button class="field-help" type="button" data-definition="q3" aria-label="Explain Q3">?</button></span><input id="practiceQ3" type="text" inputmode="decimal" /></label>
+              <label><span class="mini-label">Max <button class="field-help" type="button" data-definition="maximum" aria-label="Explain maximum">?</button></span><input id="practiceMax" type="text" inputmode="decimal" /></label>
+            </div>
+          </article>
+          <section id="feedback" class="feedback hidden"></section>
+        </section>
+      </section>
+    </section>
+
+    <section id="metaSection" class="mode-section hidden">
+      <section class="meta-layout">
+            <aside class="panel meta-summary">
+              <p class="eyebrow">YOUR PRACTICE RESULTS</p>
+              <h2>Meta Mode</h2>
+              <p id="metaPrompt" class="practice-prompt">Complete Practice Mode questions to build a data set of your scores.</p>
+              <div class="practice-dataset">
+                <strong>Scores by question</strong>
+                <p id="metaDataValues" aria-live="polite">No completed questions yet.</p>
+                <span>Each value is the points earned in one submitted question (0–8).</span>
+              </div>
+              <div class="meta-counts">
+                <span>Total points <b id="metaTotalScore">0</b></span>
+                <span>Questions <b id="metaQuestionCount">0</b></span>
+              </div>
+            </aside>
+            <section class="meta-displays">
+              <section class="graphs-section">
+                <div class="section-heading">
+                  <div><p class="eyebrow">AUTOMATIC VISUALISATIONS</p><h2>Score data</h2></div>
+                  <p class="rounding-note">Graphs update after each submitted question</p>
+                </div>
+                <div class="graphs-grid">
+                  <article class="graph-card">
+                    <div class="graph-title"><h3>Box plot</h3><span>Scores out of 8</span></div>
+                    <div id="metaBoxPlot" class="graph"></div>
+                  </article>
+                  <article class="graph-card">
+                    <div class="graph-title"><h3>Cumulative frequency</h3><span>Ogive with score points</span></div>
+                    <div id="metaOgivePlot" class="graph"></div>
+                  </article>
+                  <article class="graph-card">
+                    <div class="graph-title"><h3>Stem-and-leaf plot</h3><span id="metaStemKey">Key</span></div>
+                    <div id="metaStemPlot" class="stem-container"></div>
+                  </article>
+                  <article class="graph-card">
+                    <div class="graph-title"><h3>Distribution curve</h3><span>Smoothed shape guide</span></div>
+                    <div id="metaDistributionLegend" class="distribution-legend"></div>
+                    <div id="metaDistributionPlot" class="graph"></div>
+                    <p id="metaDistributionNote" class="chart-note"></p>
+                  </article>
+                </div>
+              </section>
+              <section class="indicators-section">
+                <div class="section-heading">
+                  <div><p class="eyebrow">CALCULATED RESULTS</p><h2>Score indicators</h2></div>
+                </div>
+                <section class="stats-grid" id="metaStatsGrid"></section>
+          </section>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="workedExample">
+    <div class="dialog-heading">
+      <div><p class="eyebrow">WORKED EXAMPLE</p><h2 id="exampleTitle"></h2></div>
+      <button id="closeExample" class="icon-button" type="button" aria-label="Close">×</button>
+    </div>
+    <div id="exampleBody"></div>
+  </dialog>
+
+  <footer class="curriculum-note">
+    Aligned to the data-analysis focus in the
+    <a href="https://curriculum.nsw.edu.au/learning-areas/mathematics/mathematics-k-10-2022/content/stage-5/facb3aa952" target="_blank" rel="noreferrer">NSW Mathematics K–10 Stage 5 syllabus</a>.
+    Graphs use standard box-plot and cumulative-frequency conventions.
+  </footer>
+
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+  </script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
